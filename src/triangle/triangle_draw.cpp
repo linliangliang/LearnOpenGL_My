@@ -15,31 +15,6 @@
 #include "triangle/triangle.h"
 #include "glCallbackHandle.h"
 
-//
-//// 按键事件
-//
-//void procsssInput(GLFWwindow* window) 
-//{
-//	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-//	{
-//		glfwSetWindowShouldClose(window, true);
-//	}
-//}
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n\0";
-
-
 
 #ifdef hello_triangle
 int main()
@@ -104,7 +79,9 @@ int main_hello_triangle()
 	}
 	
 
-
+	// 设置透明度生效
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -116,6 +93,13 @@ int main_hello_triangle()
 
 
 		program->Use();
+
+		// 设置uniform 参数
+
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		program->SetUniform("uniform_color",glm::vec4(1, greenValue,0,1));
+
 		triangle.Draw();
 		program->UnUse();
 

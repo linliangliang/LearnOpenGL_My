@@ -32,27 +32,37 @@ ADD_LINK_OPTIONS(/DEBUG)
 add_compile_definitions(NANOVG_GLEW)
 #add_compile_definitions(GLEW_STATIC) 改用GLAD
 
-file(GLOB LearnOpenGL_My_INC "${CMAKE_CURRENT_SOURCE_DIR}/linclude/*.h""${CMAKE_CURRENT_SOURCE_DIR}/linclude/LearnOpenGL_My/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/linclude/LearnOpenGL_My/*.hpp")
+file(GLOB LearnOpenGL_My_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"  "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 file(GLOB LearnOpenGL_My_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c" "${CMAKE_CURRENT_SOURCE_DIR}/src/LearnOpenGL_My/*.cpp")
 
 file(GLOB GLAD_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/glad/*.c")
 
 #三角形demo
-file(GLOB TRIANDLE_INC "${CMAKE_CURRENT_SOURCE_DIR}/linclude/triangle/*.h")
+file(GLOB TRIANDLE_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/triangle/*.h")
 file(GLOB TRIANDLE_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/triangle/*.cpp")
 
-list(APPEND LearnOpenGL_My_SRC_List  ${LearnOpenGL_My_INC} ${LearnOpenGL_My_SRC} ${GLAD_SRC}
-    ${TRIANDLE_SRC}
+#纹理demo
+file(GLOB TEXTURE_DEMO_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/texture/*.h")
+file(GLOB TEXTURE_DEMO_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/texture/*.cpp")
+
+list(APPEND LearnOpenGL_My_INC_List  ${LearnOpenGL_My_INC} 
+    ${TRIANDLE_INC}
+    ${TEXTURE_DEMO_INC}
 )
- 
+
+list(APPEND LearnOpenGL_My_SRC_List ${LearnOpenGL_My_SRC} 
+    ${GLAD_SRC}
+    ${TRIANDLE_SRC}
+    ${TEXTURE_DEMO_SRC}
+)
+
 source_group("src/LearnOpenGL_My" FILES ${LearnOpenGL_My_SRC})
 source_group("src/glad/" FILES ${GLAD_SRC})
 source_group("src/triangle/" FILES ${TRIANDLE_SRC})
-# Header怎么不生效
-#source_group("Include/" FILES ${LearnOpenGL_My_INC})
+source_group("src/texture/" FILES ${TEXTURE_DEMO_SRC})
+source_group("include" FILES ${LearnOpenGL_My_INC_List})
 
-
-add_executable(LearnOpenGL_My ${LearnOpenGL_My_SRC_List})
+add_executable(LearnOpenGL_My ${LearnOpenGL_My_SRC_List} ${LearnOpenGL_My_INC_List})
 
 target_compile_definitions(LearnOpenGL_My PRIVATE GLEW_STATIC)
 if (MSVC)

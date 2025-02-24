@@ -13,7 +13,7 @@
 #ifdef hello_start
 int main()
 #else
-int main_hello_triangle()
+int main_hello_start()
 #endif
 {
 	// 初始化GLFW
