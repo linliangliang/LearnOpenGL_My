@@ -1,0 +1,142 @@
+{
+    "tasks": [
+        // MSVC编译 Release x64 
+        {   
+            "label": "MSVC_Release_x64", 
+            "dependsOn":[
+                "cmake_build-MSVC_x64", 
+                "MSVC_make_Release"
+            ]
+        },
+        // MSVC编译 Debug x64 
+        {   
+            "label": "MSVC_Debug_x64", 
+            "dependsOn":[
+                "cmake_build-MSVC_x64", 
+                "MSVC_make_Debug"
+            ]
+        },
+        // MSVC编译 Release x64 
+        {   
+        "label": "MSVC_Release_x86", 
+        "dependsOn":[
+            "cmake_build-MSVC_x86", 
+            "MSVC_make_Release"
+        ]
+        },
+        // MSVC编译 Debug x64 
+        {   
+        "label": "MSVC_Debug_x86", 
+        "dependsOn":[
+            "cmake_build-MSVC_x86", 
+            "MSVC_make_Debug"
+        ]
+        },
+
+        // MinGW编译
+        {   
+        "label": "MinGW", 
+        "dependsOn":[
+            "cmake_build-MinGW", 
+            "MinGW-make"
+        ]
+        },
+
+
+
+
+        {
+            "label": "cmake_build-MSVC_x64",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G", "Visual Studio 16 2019", // 使用 MSVC 生成器
+                "-A", "x64",                   // 指定目标架构为 x64
+                "-S", "${workspaceFolder}",    // 源码目录
+                "-B", "${workspaceFolder}/build",  // 构建目录
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$msCompile"],
+            "detail": "Generate MSVC x64 build files"
+        },
+        {
+            "label": "cmake_build-MSVC_x86",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G", "Visual Studio 16 2019", // 使用 MSVC 生成器
+                "-A", "Win32",                   // 指定目标架构为 x64
+                "-S", "${workspaceFolder}",    // 源码目录
+                "-B", "${workspaceFolder}/build",  // 构建目录
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$msCompile"],
+            "detail": "Generate MSVC x64 build files"
+        },
+        {
+            "label": "cmake_build-MinGW",//cmake操作。
+            "type":"shell",           
+            "command":"cmake",//执行cmake操作所使用的命令。
+            "args": [                 //cmake命令执行时的命令行参数。
+            //"--build", "build",
+            //"--config", "Release",
+            //"--", "-A", "Win32",
+                "-G MinGW Makefiles", //生成 mingw32-make 能够编译的Makefile。
+                "../",
+            ],
+        },
+        
+
+
+        {
+            "label": "MSVC_make_Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build", // 构建目录
+                "--config", "Release"               // 指定构建配置（Release 或 Debug）
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$msCompile"],
+            "detail": "Build with MSVC Release"
+        },
+        {
+            "label": "MSVC_make_Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build", // 构建目录
+                "--config", "Debug"               // 指定构建配置（Release 或 Debug）
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$msCompile"],
+            "detail": "Build with MSVC Debug"
+        },
+        {
+            "label": "MinGW-make",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "${workspaceFolder}/build", // 构建目录
+                "--config", "Release"               // 指定构建配置（Release 或 Debug）
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$msCompile"],
+            "detail": "Build with MSVC Debug"
+        }
+    ],
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}\\build"  //表示执行上述操作时的工作目录。
+    },
+}
