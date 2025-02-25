@@ -1,5 +1,5 @@
 
-#include "texture/texture.h"
+#include "texture_transform/texture_transform.h"
 
 #include "glshader.h"
 
@@ -7,12 +7,14 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 //纹理加载
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "LearnOpenGL_base.h"
 
-TexureDemo::TexureDemo()
+TexureTransformDemo::TexureTransformDemo()
 {
 	char path[MAX_PATH];
 	if (GetCurrentDirectoryA(sizeof(path), path)) {
@@ -27,26 +29,26 @@ TexureDemo::TexureDemo()
 	 // 设置数据
 	 glGenVertexArrays(1, &VAO);
 	 glGenBuffers(1, &VBO);
-	 glGenBuffers(1, &EBO);
+	 /// glGenBuffers(1, &EBO);
 
 	 glBindVertexArray(VAO);
 	 {
 		 // 2. 把顶点数组复制到缓冲中供OpenGL使用
 		 glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		 glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		 // 索引
-		 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		 /// // 索引
+		 /// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		 /// glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 		 // 位置属性
-		 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 		 glEnableVertexAttribArray(0);
-		 // 颜色属性
-		 glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		 glEnableVertexAttribArray(1);
+		 /// // 颜色属性
+		 /// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		 /// glEnableVertexAttribArray(1);
 		 // 纹理坐标
-		 glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-		 glEnableVertexAttribArray(2);
+		 glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		 glEnableVertexAttribArray(1);
 
 		 glBindBuffer(GL_ARRAY_BUFFER, 0);
 	 }
@@ -54,11 +56,11 @@ TexureDemo::TexureDemo()
 
 }
 
-TexureDemo::~TexureDemo()
+TexureTransformDemo::~TexureTransformDemo()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	/// glDeleteBuffers(1, &EBO);
 	if (program !=nullptr)
 	{
 		delete program;
@@ -66,7 +68,7 @@ TexureDemo::~TexureDemo()
 	}
 }
 
-void TexureDemo::loadTexture() {
+void TexureTransformDemo::loadTexture() {
 
 	std::string wallPath = mCurrentPath + "/../source/wall.jpg";
 	std::string awesomeface = mCurrentPath + "/../source/awesomeface.png";
@@ -78,7 +80,7 @@ void TexureDemo::loadTexture() {
 	// 为当前绑定的纹理对象设置环绕、过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// 设置纹理
 	stbi_set_flip_vertically_on_load(true); // Y轴翻转
@@ -101,7 +103,7 @@ void TexureDemo::loadTexture() {
 	// 为当前绑定的纹理对象设置环绕、过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// 设置纹理
 	int width2, height2, nrChannels2;
@@ -119,12 +121,12 @@ void TexureDemo::loadTexture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void TexureDemo::loadShaderProgram() {
+void TexureTransformDemo::loadShaderProgram() {
 	// 加载shader
 	program = new glProgram();
 	{
-		std::string vsPath = mCurrentPath + "/../shader/texture.vs";
-		std::string fsPath = mCurrentPath + "/../shader/texture.fs";
+		std::string vsPath = mCurrentPath + "/../shader/texture_transform.vs";
+		std::string fsPath = mCurrentPath + "/../shader/texture_transform.fs";
 		glShader vsShader = glShader(shader_t::Vertex_Shader);
 		glShader fsShader = glShader(shader_t::Fragment_Shader);
 		vsShader.readFromFile(vsPath.c_str());
@@ -133,7 +135,7 @@ void TexureDemo::loadShaderProgram() {
 	}
 }
 
-void TexureDemo::Draw() {
+void TexureTransformDemo::Draw() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//线框模式(Wireframe Mode)
 
 	glActiveTexture(GL_TEXTURE0);
@@ -144,6 +146,7 @@ void TexureDemo::Draw() {
 	//glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(VAO);
 	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	//glDrawElements(GL_LINE_STRIP, 6, GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

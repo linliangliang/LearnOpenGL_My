@@ -8,16 +8,21 @@ public:
 	TexureDemo();
 	~TexureDemo();
 	void loadTexture();
+	void loadShaderProgram();
 	void Draw();
 	GLuint texture1;
 	GLuint texture2;
+	glProgram* program = nullptr;
 protected:
-	//glProgram* program = nullptr;
 	float vertices[32] = {
 		0.5f, 0.5f, 0.0f,    1.0f, 0.0f, 0.0f,  1.0f, 1.0f, // срио╫г
 		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f, // сроб╫г
 		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,// вСоб╫г
 		-0.5f, 0.5f, 0.0f,   0.5f, 0.5f, 0.5f,  0.0f, 1.0f // вСио╫г
+		//0.5f, 0.5f, 0.0f,    1.0f, 0.0f, 0.0f,  0.55f, 0.55f, // срио╫г
+		//0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  0.55f, 0.45f, // сроб╫г
+		//-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.45f, 0.45f,// вСоб╫г
+		//-0.5f, 0.5f, 0.0f,   0.5f, 0.5f, 0.5f,  0.45f, 0.55f // вСио╫г
 	};
 
 	GLuint indices[6] = {
@@ -28,4 +33,7 @@ protected:
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;
+
+private:
+	std::string mCurrentPath;
 };

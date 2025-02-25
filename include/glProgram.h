@@ -54,7 +54,7 @@ public:
 	bool SetUniform(const std::string& uniform, const glm::vec4* values, GLuint count);
 	bool SetUniform(const std::string& uniform, const glm::mat3& value);
 	bool SetUniform(const std::string& uniform, const glm::mat4& value);
-protected:
+private:
 	GLuint program = 0;
 };
 

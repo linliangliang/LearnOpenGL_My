@@ -85,7 +85,7 @@ int main_hello_triangle()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		handler.procsssInput(window);
+		//handler.procsssInput(window, nullptr);
 
 		// 渲染
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

@@ -74,6 +74,8 @@ void glProgram::attach(const glShader& vert, const glShader& fragment, const glS
 		glGetProgramInfoLog(program, 512, NULL, infoLog);
 		std::cout << infoLog << std::endl;
 	}
+	glDeleteShader(vert.shader);
+	glDeleteShader(fragment.shader);
 }
 
 void glProgram::Use()

@@ -15,10 +15,35 @@
 #include "glCallbackHandle.h"
 
 
+namespace texture{
+	static float alpha = 0.5f;
+	// 键盘输入
+	void keyInput(GLFWwindow* window) {
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			alpha += 0.01;
+			if (alpha > 1.0f)
+			{
+				alpha = 1.0f;
+			}
+		}
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			alpha -= 0.01;
+			if (alpha < 0.0f)
+			{
+				alpha = 0.0f;
+			}
+		}
+	}
+}
+
+
+
 #ifdef hello_texture
 int main()
 #else
-int main_hello_triangle()
+int main_hello_texture()
 #endif
 {
 	// 初始化GLFW
@@ -57,61 +82,37 @@ int main_hello_triangle()
 	// 创建三角形
 	TexureDemo texureDemo; // vao vbo初始化
 	texureDemo.loadTexture(); // texture 初始化
+	texureDemo.loadShaderProgram(); // attach shader Program
 
-
-	// 加载shader
-	glProgram* program = new glProgram();
-	{
-		//初始化shader
-		char path[MAX_PATH];
-		if (GetCurrentDirectoryA(sizeof(path), path)) {
-			std::cout << "Current directory: " << path << std::endl;
-		}
-		else {
-			std::cerr << "Error getting current directory." << std::endl;
-		}
-
-		std::string local_path = std::string(path);
-		std::string vsPath = local_path + "/../shader/texture.vs";
-		std::string fsPath = local_path + "/../shader/texture.fs";
-		glShader vsShader = glShader(shader_t::Vertex_Shader);
-		glShader fsShader = glShader(shader_t::Fragment_Shader);
-		vsShader.readFromFile(vsPath.c_str());
-		fsShader.readFromFile(fsPath.c_str());
-		program->attach(vsShader, fsShader);
-	}
-	
 
 	// 设置透明度生效
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//program->Use();
-	//// 设置uniform 参数
-	//
-	//program->SetUniform("ourTexture1", 0);
-	//program->SetUniform("ourTexture2", 1);
-	//program->UnUse();
+
 
 	while (!glfwWindowShouldClose(window))
 	{
-		handler.procsssInput(window);
+		//handler.procsssInput(window, texture::keyInput);
+		texture::keyInput(window);
 
 		// 渲染
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		program->Use();
+		texureDemo.program->Use();
 
 		// 设置uniform 参数
 		float timeValue = glfwGetTime();
 		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		program->SetUniform("uniform_color",glm::vec4(1, greenValue,0,1));
-		program->SetUniform("ourTexture1",0);
-		program->SetUniform("ourTexture2",1);
+		texureDemo.program->SetUniform("uniform_alpha", texture::alpha);
+		texureDemo.program->SetUniform("texture1", 0);
+		texureDemo.program->SetUniform("texture2", 1);
+		//glUniform1i(glGetUniformLocation(texureDemo.program->program, "texture1"), 0);
+		//glUniform1i(glGetUniformLocation(texureDemo.program->program, "texture2"), 1);
 
 		texureDemo.Draw();
-		program->UnUse();
+		texureDemo.program->UnUse();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

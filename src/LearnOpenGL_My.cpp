@@ -10,6 +10,10 @@
 #include "LearnOpenGL_base.h"
 #include "glCallbackHandle.h"
 
+void key_input_start(GLFWwindow* window) {
+
+}
+
 #ifdef hello_start
 int main()
 #else
@@ -50,7 +54,7 @@ int main_hello_start()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		handler.procsssInput(window);
+		key_input_start(window);
 
 		// 渲染
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

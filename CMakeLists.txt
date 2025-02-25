@@ -45,21 +45,29 @@ file(GLOB TRIANDLE_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/triangle/*.cpp")
 file(GLOB TEXTURE_DEMO_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/texture/*.h")
 file(GLOB TEXTURE_DEMO_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/texture/*.cpp")
 
+# 矩阵变换
+file(GLOB TEXTURE_TRANSFORM_DEMO_INC "${CMAKE_CURRENT_SOURCE_DIR}/include/texture_transform/*.h")
+file(GLOB TEXTURE_TRANSFORM_DEMO_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/texture_transform/*.cpp")
+
+
 list(APPEND LearnOpenGL_My_INC_List  ${LearnOpenGL_My_INC} 
     ${TRIANDLE_INC}
     ${TEXTURE_DEMO_INC}
+    ${TEXTURE_TRANSFORM_DEMO_INC}
 )
 
 list(APPEND LearnOpenGL_My_SRC_List ${LearnOpenGL_My_SRC} 
     ${GLAD_SRC}
     ${TRIANDLE_SRC}
     ${TEXTURE_DEMO_SRC}
+    ${TEXTURE_TRANSFORM_DEMO_SRC}
 )
 
 source_group("src/LearnOpenGL_My" FILES ${LearnOpenGL_My_SRC})
 source_group("src/glad/" FILES ${GLAD_SRC})
 source_group("src/triangle/" FILES ${TRIANDLE_SRC})
 source_group("src/texture/" FILES ${TEXTURE_DEMO_SRC})
+source_group("src/texture_transform/" FILES ${TEXTURE_TRANSFORM_DEMO_SRC})
 source_group("include" FILES ${LearnOpenGL_My_INC_List})
 
 add_executable(LearnOpenGL_My ${LearnOpenGL_My_SRC_List} ${LearnOpenGL_My_INC_List})
